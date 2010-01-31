@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>flex-demo-parent</artifactId>
+		<groupId>com.example</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>flex-demo-swf</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>flex-demo-swf</name>
+	<packaging>swf</packaging>
+	<url>http://maven.apache.org</url>
+
+	<repositories>
+		<repository>
+			<id>flexmojos</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>flexmojos</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>flex-framework</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>pom</type>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>playerglobal</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>playerglobal</artifactId>
+			<version>${flex.sdk.version}</version>
+			<classifier>10</classifier>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flexunit</groupId>
+			<artifactId>flexunit</artifactId>
+			<version>${flexunit.version}</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src/main/flex</sourceDirectory>
+		<testSourceDirectory>src/test/flex</testSourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>${flexmojos.version}</version>
+				<extensions>true</extensions>
+				<dependencies>
+					<dependency>
+						<groupId>com.adobe.flex</groupId>
+						<artifactId>compiler</artifactId>
+						<version>${flex.sdk.version}</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<locales>
+						<locale>en_US</locale>
+					</locales>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wrapper</goal>
+						</goals>
+						<configuration>
+							<parameters>
+								<swf>${build.finalName}</swf>
+								<width>100%</width>
+                				<height>100%</height>
+              				</parameters>
+            			</configuration>
+          			</execution>
+        		</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
