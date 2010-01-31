@@ -1,10 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml"
-	layout="absolute">
+	layout="absolute"
+	creationComplete="creationComplete(event)">
 	
-	<mx:Panel height="100%" width="100%">
-		<mx:Label text="Hello, World!"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.http.HTTPService;
+			
+			import mx.controls.Alert;
+			
+			import mx.managers.BrowserManager;
+			import mx.managers.IBrowserManager;
+			
+			[Bindable] private var _base:String;
+			[Bindable] private var _url:String;
+			[Bindable] private var _fragment:String;
+			
+			[Bindable] private var _httpServiceUrl:String;
+			
+			[Bindable] private var _httpService:HTTPService;
+			
+			private static const SERVICE_URL:String = "/services/v1/rest/serviceName";
+			
+			private function creationComplete(e:Event):void {
+				var bm:IBrowserManager = BrowserManager.getInstance();
+				bm.init();
+				
+				_base = bm.base;
+				_url = bm.url;
+				_fragment = bm.fragment;
+				
+				_httpService = new HTTPService();
+				_httpService.url = SERVICE_URL;
+				_httpServiceUrl = _httpService.url;
+				
+			}
+			
+			private function onClick(e:Event):void {
+				
+				_httpService.addEventListener(FaultEvent.FAULT, function faultHandler(e:FaultEvent):void {
+					Alert.show(e.fault.toString());
+				});
+				
+				_httpService.send();
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Panel height="100%" width="100%" title="Testing BrowserManager">
+		<mx:Form width="100%" height="100%">
+			<mx:FormItem label="BrowserManager.base">
+				<mx:Label text="{_base}"/>
+			</mx:FormItem>
+			<mx:FormItem label="BrowserManager.url">
+				<mx:Label text="{_url}"/>
+			</mx:FormItem>
+			<mx:FormItem label="BrowserManager.fragment">
+				<mx:Label text="{_fragment}"/>
+			</mx:FormItem>
+			<mx:FormItem label="HTTPService.url on relative path">
+				<mx:Label text="{_httpServiceUrl}"/>
+			</mx:FormItem>
+			<mx:FormItem label="Fire HTTPService on Bogus URL">
+				<mx:Button label="SEND" click="onClick(event)"/>
+			</mx:FormItem>
+		</mx:Form>
 	</mx:Panel>
 	
 </mx:Application>
